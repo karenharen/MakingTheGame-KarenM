@@ -10,11 +10,18 @@ public class PlayerController : MonoBehaviour
     public float gravityMultiplier;
     public bool onGround = true;
 
+    public bool gameOver;
+
     // Start is called before the first frame update
     void Start()
     {
         playerRB = GetComponent<Rigidbody>();
         Physics.gravity *= gravityMultiplier;
+
+        for (int i = 0; i < 5; i++)
+        {
+            Debug.Log(i);
+        }
         
     }
 
@@ -30,6 +37,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        onGround = true;
+
+        if (collision.gameObject.CompareTag("obstacle"))
+        {
+            gameOver = true;
+            Debug.Log("Game Over");
+        } else if (collision.gameObject.CompareTag("ground"))
+        {
+            onGround = true;
+        }
+        
     }
 }
