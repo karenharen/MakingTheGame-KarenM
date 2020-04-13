@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour
 {
 
     private Rigidbody playerRB;
+    private Animator playerAnim;
+
+
     public float ForceMultiplier;
     public float gravityMultiplier;
     public bool onGround = true;
@@ -16,6 +19,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerRB = GetComponent<Rigidbody>();
+        playerAnim = GetComponent<Animator>();
         Physics.gravity *= gravityMultiplier;
 
         for (int i = 0; i < 5; i++)
@@ -28,10 +32,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && onGround)
+        if(Input.GetKeyDown(KeyCode.Space) && onGround &&!gameOver)
         {
             playerRB.AddForce(Vector3.up * ForceMultiplier, ForceMode.Impulse);
             onGround = false;
+            playerAnim.SetTrigger("Jump_trig");
         }
     }
 
@@ -42,6 +47,8 @@ public class PlayerController : MonoBehaviour
         {
             gameOver = true;
             Debug.Log("Game Over");
+            playerAnim.SetBool("Death_b", true);
+            playerAnim.SetInteger("DeathType_int", 1);
         } else if (collision.gameObject.CompareTag("ground"))
         {
             onGround = true;
